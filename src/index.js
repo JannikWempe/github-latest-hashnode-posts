@@ -29,6 +29,7 @@ function getInputs() {
 		closingComment: core.getInput('CLOSING_COMMENT') || DEFAULT_CLOSING_COMMENT,
 		maxPosts: +core.getInput('MAX_POSTS') || DEFAULT_MAX_POSTS,
 		commitMessage: core.getInput('COMMIT_MESSAGE') || DEFAULT_COMMIT_MESSAGE,
+		titlesAsLink: core.getInput('TITLES_AS_LINK') === 'true',
 	};
 }
 
@@ -47,6 +48,7 @@ async function getLatestHashnodePosts(options) {
 								node {
 									id
 									title
+									url
 									brief
 									publishedAt
 									coverImage {
@@ -104,7 +106,7 @@ async function replaceReadmePosts(posts, options) {
 	assertCommentExists(openingComment, readmeContent);
 	assertCommentExists(closingComment, readmeContent);
 
-	const formattedPosts = formatPosts(posts);
+	const formattedPosts = formatPosts(posts, options);
 	core.debug('Formatted posts');
 	core.debug(formattedPosts);
 
@@ -128,18 +130,24 @@ function assertCommentExists(comment, readmeContent) {
 	}
 }
 
-function formatPosts(posts) {
+function formatPosts(posts, options) {
+	const { titlesAsLink } = options;
 	return `<table>
 	${posts
 			.map(
-				(post) => `<tr>
+				(post) => {
+					const title = titlesAsLink
+						? `<a href="${post.url}" target="_blank">${post.title}</a>`
+						: post.title;
+					return `<tr>
 			<td><img src="${post.coverImage.url}" width="500" height="auto" /></td>
 			<td>
 				<sup>${post.publishedAt}</sup><br />
-				<b>${post.title}</b>
+				<b>${title}</b>
 				<p>${post.brief.replaceAll('\n', ' ')}</p>
 			</td>
-		</tr>`,
+		</tr>`;
+				},
 			)
 			.join('\n')}
 </table>`;

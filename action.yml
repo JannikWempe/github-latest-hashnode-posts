@@ -30,6 +30,10 @@ inputs:
     description: Commit message for the update commit.
     required: false
     default: 'chore(docs): update recent hashnode posts'
+  TITLES_AS_LINK:
+    description: Wrap post titles in links to the original post.
+    required: false
+    default: 'false'
 runs:
   using: node22
   main: dist/index.js
