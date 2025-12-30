@@ -1,7 +1,7 @@
 {
 	"name": "github-latest-hashnode-posts",
 	"packageManager": "pnpm@10.26.2",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "Updates your README with the latest posts one of your Hashnode publications.",
 	"main": "src/index.js",
 	"scripts": {
