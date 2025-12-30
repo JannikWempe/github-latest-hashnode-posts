@@ -31,7 +31,7 @@ inputs:
     required: false
     default: 'chore(docs): update recent hashnode posts'
 runs:
-  using: node20
+  using: node22
   main: dist/index.js
 branding:
   icon: activity
